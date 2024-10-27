@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Binary Search Animation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+    .array-container {
+      display: flex;
+      gap: 5px;
+    }
+    .element {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      color: white;
+      background-color: #3498db;
+      transition: background-color 0.3s, transform 0.3s;
+      border-radius: 5px;
+    }
+    .highlight {
+      background-color: #e74c3c !important;
+    }
+    .searched {
+      background-color: #2ecc71;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background-color: #3498db;
+      color: white;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+
+  <div>
+    <div class="array-container" id="arrayContainer"></div>
+    <button onclick="startBinarySearch()">Start Binary Search</button>
+  </div>
+
+  <script>
+    const array = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];  // Sorted array
+    const target = 13;  // Element to search for
+
+    // Render the array on page load
+    const arrayContainer = document.getElementById("arrayContainer");
+    array.forEach(num => {
+      const element = document.createElement("div");
+      element.classList.add("element");
+      element.innerText = num;
+      arrayContainer.appendChild(element);
+    });
+
+    // Binary Search Animation
+    async function startBinarySearch() {
+      let left = 0;
+      let right = array.length - 1;
+      const elements = document.querySelectorAll(".element");
+
+      while (left <= right) {
+        const mid = Math.floor((left + right) / 2);
+
+        // Highlight the mid element
+        elements[mid].classList.add("highlight");
+        await delay(1000);
+
+        if (array[mid] === target) {
+          elements[mid].classList.remove("highlight");
+          elements[mid].classList.add("searched");
+          alert(`Element found at index ${mid}`);
+          return;
+        }
+
+        elements[mid].classList.remove("highlight");
+
+        // Narrow down search area
+        if (array[mid] < target) {
+          left = mid + 1;
+        } else {
+          right = mid - 1;
+        }
+
+        // Highlight the remaining search range
+        elements.forEach((el, index) => {
+          if (index < left || index > right) {
+            el.style.backgroundColor = "#bdc3c7";
+          }
+        });
+        
+        await delay(1000);
+      }
+
+      alert("Element not found");
+    }
+
+    // Helper function to add delay
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+  </script>
+
+</body>
+</html>
